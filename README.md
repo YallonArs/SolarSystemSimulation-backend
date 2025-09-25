@@ -1,2 +1,2 @@
-# ftl_it_proj_2
+# FTL-proj2
 Modeling
