@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <limits>
 
+#include "utils/Constants.h"
 #include "Vector.h"
 
 Vector::Vector() : _point(0, 0) {}
-
 Vector::Vector(double x, double y) : _point(x, y) {}
 Vector::Vector(const Point& point) : _point(point) {}
 Vector::Vector(const Point& from, const Point& to) : _point(to - from) {}
@@ -51,7 +51,7 @@ Vector& Vector::operator/=(double scalar) {
 
 Vector Vector::normalized() const {
 	double len = length();
-	if (len == 0.0) return *this;
+	if (len <= Constants::EPSILON) return *this;
 	return *this / len;
 }
 
@@ -74,11 +74,12 @@ double Vector::cross(const Vector& other) const {
 double Vector::angleTo(const Vector& other) const {
 	double dotProduct = dot(other);
 	double magnitudes = length() * other.length();
-	if (magnitudes == 0.0) return 0.0;
+	if (magnitudes <= Constants::EPSILON) return 0.0;
+
 	double c = std::clamp(dotProduct / magnitudes, -1.0, 1.0);
 	return std::acos(c);
 }
 
 bool Vector::isZero() const {
-	return length() <= std::numeric_limits<double>::epsilon();
+	return length() <= Constants::EPSILON;
 }

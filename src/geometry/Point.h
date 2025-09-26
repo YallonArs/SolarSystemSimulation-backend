@@ -5,7 +5,7 @@
 class Vector;
 
 class Point {
-private:
+protected:
     double _x, _y;
 
 public:

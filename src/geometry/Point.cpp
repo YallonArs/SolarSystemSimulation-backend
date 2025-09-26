@@ -1,6 +1,7 @@
 #include <limits>
 #include <cmath>
 
+#include "utils/Constants.h"
 #include "Point.h"
 #include "Vector.h"
 
@@ -67,8 +68,8 @@ Point Point::operator/(double scalar) const {
 }
 
 bool Point::operator==(const Point& other) const {
-	return std::abs(_x - other._x) <= std::numeric_limits<double>::epsilon() &&
-		std::abs(_y - other._y) <= std::numeric_limits<double>::epsilon();
+	return std::abs(_x - other._x) <= Constants::EPSILON &&
+		std::abs(_y - other._y) <= Constants::EPSILON;
 }
 
 bool Point::operator!=(const Point& other) const {

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Point.h"
-#include "Vector.h"
+#include "geometry/Point.h"
+#include "geometry/Vector.h"
 
 int main() {
 	Point p1(1.0, 2.0);
