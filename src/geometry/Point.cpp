@@ -1,0 +1,81 @@
+#include <limits>
+#include <cmath>
+
+#include "Point.h"
+#include "Vector.h"
+
+Point::Point() : _x(0.0), _y(0.0) {}
+
+Point::Point(std::pair<double, double> values) {
+	_x = values.first;
+	_y = values.second;
+}
+
+Point::Point(double x, double y) : _x(x), _y(y) {}
+
+double Point::x() const { return _x; }
+double Point::y() const { return _y; }
+
+Point Point::operator-() const {
+	return Point(-_x, -_y);
+}
+
+Point Point::operator+(const Point& other) const {
+	return Point(_x + other._x, _y + other._y);
+}
+
+Point Point::operator+(const Vector& vector) const {
+	return *this + vector.point();
+}
+
+Point Point::operator-(const Point& other) const {
+	return *this + (-other);
+}
+
+Point Point::operator-(const Vector& vector) const {
+	return *this + (-vector);
+}
+
+Point& Point::operator+=(const Point& other) {
+	*this = *this + other;
+
+	return *this;
+}
+
+Point& Point::operator+=(const Vector& vector) {
+	*this = *this + vector;
+	return *this;
+}
+
+Point& Point::operator-=(const Point& other) {
+	*this = *this - other;
+
+	return *this;
+}
+
+Point& Point::operator-=(const Vector& vector) {
+	*this = *this - vector;
+	return *this;
+}
+
+Point Point::operator*(double scalar) const {
+	return Point(_x * scalar, _y * scalar);
+}
+
+Point Point::operator/(double scalar) const {
+	return *this * (1.0 / scalar);
+}
+
+bool Point::operator==(const Point& other) const {
+	return std::abs(_x - other._x) <= std::numeric_limits<double>::epsilon() &&
+		std::abs(_y - other._y) <= std::numeric_limits<double>::epsilon();
+}
+
+bool Point::operator!=(const Point& other) const {
+	return !(*this == other);
+}
+
+
+double Point::distanceTo(const Point& other) const {
+	return std::sqrt(pow(_x - other._x, 2) + pow(_y - other._y, 2));
+}
