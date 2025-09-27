@@ -2,16 +2,10 @@
 #include <cmath>
 
 #include "utils/Constants.h"
-#include "Point.h"
-#include "Vector.h"
+#include "geometry/Point.h"
+#include "geometry/Vector.h"
 
 Point::Point() : _x(0.0), _y(0.0) {}
-
-Point::Point(std::pair<double, double> values) {
-	_x = values.first;
-	_y = values.second;
-}
-
 Point::Point(double x, double y) : _x(x), _y(y) {}
 
 double Point::x() const { return _x; }
@@ -74,9 +68,4 @@ bool Point::operator==(const Point& other) const {
 
 bool Point::operator!=(const Point& other) const {
 	return !(*this == other);
-}
-
-
-double Point::distanceTo(const Point& other) const {
-	return std::sqrt(pow(_x - other._x, 2) + pow(_y - other._y, 2));
 }

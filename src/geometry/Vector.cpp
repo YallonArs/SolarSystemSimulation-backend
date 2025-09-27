@@ -1,19 +1,24 @@
 #include <algorithm>
 #include <limits>
 
+#include "geometry/Vector.h"
 #include "utils/Constants.h"
-#include "Vector.h"
+#include "math/MathUtils.h"
 
 Vector::Vector() : _point(0, 0) {}
 Vector::Vector(double x, double y) : _point(x, y) {}
-Vector::Vector(const Point& point) : _point(point) {}
-Vector::Vector(const Point& from, const Point& to) : _point(to - from) {}
+Vector::Vector(const Point &point) : _point(point) {}
+Vector::Vector(const Point &from, const Point &to) : _point(to - from) {}
 
-Vector Vector::operator+(const Vector& other) const {
+double Vector::x() const { return _point.x(); }
+double Vector::y() const { return _point.y(); }
+Point Vector::point() const { return _point; }
+
+Vector Vector::operator+(const Vector &other) const {
 	return Vector(_point + other._point);
 }
 
-Vector Vector::operator-(const Vector& other) const {
+Vector Vector::operator-(const Vector &other) const {
 	return *this + (-other);
 }
 
@@ -29,22 +34,22 @@ Vector Vector::operator-() const {
 	return Vector(-_point);
 }
 
-Vector& Vector::operator+=(const Vector& other) {
+Vector &Vector::operator+=(const Vector &other) {
 	this->_point += other._point;
 	return *this;
 }
 
-Vector& Vector::operator-=(const Vector& other) {
+Vector &Vector::operator-=(const Vector &other) {
 	_point -= other._point;
 	return *this;
 }
 
-Vector& Vector::operator*=(double scalar) {
+Vector &Vector::operator*=(double scalar) {
 	_point = _point * scalar;
 	return *this;
 }
 
-Vector& Vector::operator/=(double scalar) {
+Vector &Vector::operator/=(double scalar) {
 	_point = _point / scalar;
 	return *this;
 }
@@ -60,18 +65,18 @@ void Vector::normalize() {
 }
 
 double Vector::length() const {
-	return std::sqrt(pow(_point.x(), 2) + pow(_point.y(), 2));
+	return MathUtils::distance(_point, Point(0, 0));
 }
 
-double Vector::dot(const Vector& other) const {
+double Vector::dot(const Vector &other) const {
 	return _point.x() * other._point.x() + _point.y() * other._point.y();
 }
 
-double Vector::cross(const Vector& other) const {
+double Vector::cross(const Vector &other) const {
 	return _point.x() * other._point.y() - _point.y() * other._point.x();
 }
 
-double Vector::angleTo(const Vector& other) const {
+double Vector::angleTo(const Vector &other) const {
 	double dotProduct = dot(other);
 	double magnitudes = length() * other.length();
 	if (magnitudes <= Constants::EPSILON) return 0.0;

@@ -6,31 +6,32 @@ class Vector;
 
 class Point {
 protected:
-    double _x, _y;
+	double _x, _y;
 
 public:
-    Point();
-    Point(std::pair<double, double> values);
-    Point(double x, double y);
+	// constructors
+	Point();
+	Point(double x, double y);
 
-    double x() const;
-    double y() const;
+	// getters
+	double x() const;
+	double y() const;
 	
+	// operations
 	Point operator-() const;
-    Point operator+(const Point& other) const;
+	Point operator+(const Point& other) const;
 	Point operator+(const Vector& vector) const;
-    Point operator-(const Point& other) const;
-    Point operator-(const Vector& vector) const;
-    Point& operator+=(const Point& other);
-    Point& operator+=(const Vector& vector);
-    Point& operator-=(const Point& other);
+	Point operator-(const Point& other) const;
+	Point operator-(const Vector& vector) const;
+
+	Point& operator+=(const Point& other);
+	Point& operator+=(const Vector& vector);
+	Point& operator-=(const Point& other);
 	Point& operator-=(const Vector& vector);
 
-    Point operator*(double scalar) const;
-    Point operator/(double scalar) const;
+	Point operator*(double scalar) const;
+	Point operator/(double scalar) const;
 
-    bool operator==(const Point& other) const;
-    bool operator!=(const Point& other) const;
-
-    double distanceTo(const Point& other) const;
+	bool operator==(const Point& other) const;
+	bool operator!=(const Point& other) const;
 };
