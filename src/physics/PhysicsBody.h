@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "geometry/Point.h"
 #include "geometry/Vector.h"
@@ -10,6 +11,7 @@
 
 class PhysicsBody {
 protected:
+	std::string _name;
 	double _mass;
 	Point _position;
 	Vector _velocity;
@@ -17,11 +19,12 @@ protected:
 	std::vector<std::unique_ptr<Force>> _applied_forces;
 
 public:
-	PhysicsBody(double mass, const Point &position, const Vector &velocity = Vector());
+	PhysicsBody(const std::string &name, double mass, const Point &position, const Vector &velocity = Vector());
 
 	virtual ~PhysicsBody() = default;
 
 	// getters
+	const std::string &name() const { return _name; }
 	double mass() const { return _mass; }
 	const Point &position() const { return _position; }
 	const Vector &velocity() const { return _velocity; }

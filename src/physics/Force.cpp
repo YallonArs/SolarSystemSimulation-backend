@@ -1,5 +1,7 @@
 #include "physics/Force.h"
 
+#include "physics/PhysicsBody.h"
+
 Force::Force(const PhysicsBody *other) : _other_body(other) {}
 
 Vector Force::calculate(const PhysicsBody &body) const {

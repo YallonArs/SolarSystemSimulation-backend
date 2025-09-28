@@ -1,7 +1,9 @@
 #pragma once
 
-#include "physics/PhysicsBody.h"
 #include "utils/Constants.h"
+#include "geometry/Vector.h"
+
+class PhysicsBody;
 
 class Force {
 private:

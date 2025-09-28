@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "geometry/Point.h"
 #include "geometry/Vector.h"
 

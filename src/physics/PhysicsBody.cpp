@@ -1,7 +1,7 @@
-#include "physics/PhysicsBody.h"
+#include "PhysicsBody.h"
 
-PhysicsBody::PhysicsBody(double mass, const Point &position, const Vector &velocity)
-	: _mass(mass), _position(position), _velocity(velocity), _acceleration{} {}
+PhysicsBody::PhysicsBody(const std::string &name, double mass, const Point &position, const Vector &velocity)
+	: _name(name), _mass(mass), _position(position), _velocity(velocity), _acceleration{} {}
 
 void PhysicsBody::addForce(std::unique_ptr<Force> force) {
 	_applied_forces.push_back(std::move(force));

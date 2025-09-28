@@ -47,10 +47,12 @@ void Config::clear() {
 }
 
 void Config::saveToFile(const std::string& filename) const {
-	
+	// TODO: implement saving to file
 }
 
-
+void Config::loadFromFile(const std::string& filename) {
+	// TODO: implement loading from file
+}
 
 void Config::setDefaults() {
 	// Simulation parameters
