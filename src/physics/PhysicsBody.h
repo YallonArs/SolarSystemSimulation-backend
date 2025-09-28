@@ -41,5 +41,5 @@ public:
 	void clearForces();
 	Vector calculateTotalForce() const;
 	void updateAcceleration();
-	virtual void integrate(double deltaTime);
+	void integrate(double deltaTime);
 };
