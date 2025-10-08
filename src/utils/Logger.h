@@ -14,9 +14,10 @@ public:
 
 private:
 	static std::ofstream _file_stream;
+	static const std::string _filename;
 
 public:
-	Logger() = default;
+	Logger();
 	~Logger();
 
 	static void debug(const std::string& message);
@@ -25,6 +26,8 @@ public:
 	static void error(const std::string& message);
 
 private:
+	static void open();
+	static void close();
 	static void write(const std::string& message, Logger::LogLevel level);
 	static std::string levelToString(Logger::LogLevel level);
 };

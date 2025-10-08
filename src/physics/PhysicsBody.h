@@ -7,7 +7,7 @@
 #include "geometry/Point.h"
 #include "geometry/Vector.h"
 
-#include "physics/Force.h"
+#include "Force.h"
 
 class PhysicsBody {
 public:
@@ -21,7 +21,7 @@ protected:
 	double _mass;
 	State _state;
 	Vector _acceleration;
-	std::vector<Force*> _applied_forces;
+	Vector _total_force;
 
 public:
 	PhysicsBody(const std::string &name, double mass, const State &state);
@@ -44,6 +44,5 @@ public:
 	// interaction
 	void addForce(Force *force);
 	void clearForces();
-	Vector calculateTotalForce() const;
 	void updateAcceleration();
 };

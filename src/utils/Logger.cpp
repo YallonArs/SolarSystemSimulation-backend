@@ -3,9 +3,29 @@
 
 #include "Logger.h"
 
-Logger::~Logger() {
+std::ofstream Logger::_file_stream;
+const std::string Logger::_filename = ".run/application.log";
+
+void Logger::open() {
+	if (!_file_stream.is_open()) {
+		_file_stream.open(_filename);
+		
+		if (!_file_stream)
+			std::cerr << "Failed to open log file." << std::endl;
+	}
+}
+
+void Logger::close() {
 	if (_file_stream && _file_stream.is_open())
 		_file_stream.close();
+}
+
+Logger::Logger() {
+	open();
+}
+
+Logger::~Logger() {
+	close();
 }
 
 void Logger::debug(const std::string &message) {
@@ -40,8 +60,10 @@ void Logger::write(const std::string &message, Logger::LogLevel level) {
 
 	std::cout << log_line;
 
+	open();
 	_file_stream << log_line;
 	_file_stream.flush();
+	close();
 }
 
 std::string Logger::levelToString(Logger::LogLevel level) {
