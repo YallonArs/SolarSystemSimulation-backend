@@ -1,4 +1,3 @@
-
 CXX = g++
 # Find all .cpp files except those matching ./__*.cpp
 SRC = $(shell find src -name '*.cpp' ! -name '__*.cpp')
@@ -27,7 +26,10 @@ build:
 clean:
 	rm -rf build $(TARGET)
 
+re: clean all
+rer: clean all run
+
 run: $(TARGET)
 	clear; ./$(TARGET)
 
-.PHONY: all clean build run
+.PHONY: all clean build run re
