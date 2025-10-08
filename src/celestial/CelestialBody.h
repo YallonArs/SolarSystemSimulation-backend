@@ -1,25 +1,30 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
+#include "CelestialProperties.h"
 #include "physics/PhysicsBody.h"
 
-// implements satellite and parent body relationships
+// TODO: implements satellite and parent body relationships
 class CelestialBody : public PhysicsBody {
 protected:
-	std::vector<std::unique_ptr<CelestialBody>> _satellites;
+	std::vector<CelestialBody*> _satellites;
 	CelestialBody *_parent_body;
 
 public:
-	CelestialBody(const std::string &name, double mass, const Point &position, const Vector &velocity = Vector());
+	CelestialBody(const CelestialProperties &other);
 
 	// getters
-	CelestialBody *getParent() const;
-	const std::vector<std::unique_ptr<CelestialBody>> &getSatellites() const;
+	CelestialBody *getParent() const { return _parent_body; };
+	const std::vector<CelestialBody*> &getSatellites() const { return _satellites; };
+
+	// setters
+	void setParent(CelestialBody *parent) { _parent_body = parent; };
 
 	// hierarchy management
-	void addSatellite(std::unique_ptr<CelestialBody> satellite);
-	void setParent(CelestialBody *parent);
-	void update(double deltaTime);
+	void addSatellite(CelestialBody &satellite);
+	void shiftToParentReference();
+
+	bool operator==(const CelestialBody &other) const { return name() == other.name(); }
 };
