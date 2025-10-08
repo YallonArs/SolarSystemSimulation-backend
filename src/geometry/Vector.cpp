@@ -2,8 +2,8 @@
 #include <limits>
 
 #include "geometry/Vector.h"
-#include "utils/Constants.h"
 #include "math/MathUtils.h"
+#include "utils/Constants.h"
 
 Vector::Vector() : _point(0, 0) {}
 Vector::Vector(double x, double y) : _point(x, y) {}
@@ -52,6 +52,36 @@ Vector &Vector::operator*=(double scalar) {
 Vector &Vector::operator/=(double scalar) {
 	_point = _point / scalar;
 	return *this;
+}
+
+Vector Vector::rotated(double angle) const {
+	double cosA = std::cos(angle);
+	double sinA = std::sin(angle);
+
+	/*
+
+	rotation matrix:
+	| cosA -sinA |
+	| sinA  cosA |
+
+	*/
+
+	return Vector(_point.x() * cosA - _point.y() * sinA,
+				  _point.x() * sinA + _point.y() * cosA);
+}
+
+void Vector::rotate(double angle) {
+	*this = rotated(angle);
+}
+
+PolarCoords Vector::toPolar() const {
+	if (isZero()) return {0, 0};
+
+	return PolarCoords{length(), std::atan2(_point.y(), _point.x())};
+}
+
+Vector Vector::fromPolar(const PolarCoords &polar) {
+	return Vector(polar.r * std::cos(polar.theta), polar.r * std::sin(polar.theta));
 }
 
 Vector Vector::normalized() const {
