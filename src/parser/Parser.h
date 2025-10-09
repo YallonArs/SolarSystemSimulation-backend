@@ -8,12 +8,10 @@
 
 class Parser {
 private:
-	std::filesystem::path configPath;
-	static Config parseFile(const std::filesystem::path &filename);
-	static void parseFileIntoConfig(const std::filesystem::path &filename, Config &config, const std::string &root = "");
+	std::string configPath;
 
 public:
-	Parser(std::string config_path = ".config/") : configPath(config_path) {};
+	Parser(std::string config_path = ".config/config.toml") : configPath(config_path) {};
 
 	Config load();
 };

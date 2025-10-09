@@ -1,76 +1,40 @@
 #include <filesystem>
-#include <fstream>
-#include <sstream>
+#include <iostream>
+#include "toml.hpp"
 
 #include "Parser.h"
-
-Config Parser::parseFile(const std::filesystem::path &filename) {
-	Config config;
-
-	std::ifstream file_stream(filename);
-	std::string line;
-	while (std::getline(file_stream, line)) {
-		// Skip empty lines and comments
-		if (line.empty() || line[0] == '#') continue;
-		std::istringstream iss(line);
-		std::string key, type, eq, value_str;
-		if (!(iss >> key >> type >> eq >> value_str)) continue;
-		// Remove leading spaces from value_str
-		value_str.erase(0, value_str.find_first_not_of(" "));
-		
-		if (type == "string") {
-			config.set(key, value_str);
-		} else if (type == "int") {
-			try {
-				int val = std::stoi(value_str);
-				config.set(key, val);
-			} catch (...) {
-				Logger::error("expected int value for key: " + key);
-			}
-		} else if (type == "double") {
-			try {
-				double val = std::stod(value_str);
-				config.set(key, val);
-			} catch (...) {
-				Logger::error("expected double value for key: " + key);
-			}
-		} else if (type == "bool") {
-			bool val = (value_str == "true" || value_str == "1");
-			config.set(key, val);
-		}
-	}
-	return config;
-}
-
-void Parser::parseFileIntoConfig(const std::filesystem::path &filename, Config &config, const std::string &root) {
-	Config fileConfig = parseFile(filename);
-	// config.addConfig(root, fileConfig);
-}
+#include "celestial/CelestialProperties.h"
+#include "utils/Config.h"
 
 Config Parser::load() {
-	// recursive walk
-	Config config;
+	toml::table tbl = toml::parse_file(configPath);
 
-	for (const auto &entry : std::filesystem::directory_iterator(configPath)) {
-		if (entry.is_regular_file()) {
-			std::filesystem::path filepath = entry.path().filename().stem();
+	std::vector<CelestialProperties *> props_all;
 
-			parseFileIntoConfig(entry.path(), config, filepath.stem().string());
+	for (const auto &[key, value] : *tbl["system"]["bodies"].as_table()) {
+		if (value.is_table()) {
+			CelestialProperties *props = new CelestialProperties();
+			const auto section = *value.as_table();
+
+			props->name = key.str();
+			props->mass = section["mass"].value_or(0.0);
+			props->kepler.a = section["a"].value_or(0.0);
+			props->kepler.e = section["e"].value_or(0.0);
+			props->kepler.omega = section["omega"].value_or(0.0);
+			props->kepler.phi = section["phi"].value_or(0.0);
+			props->state = PhysicsBody::State();
+
+			props_all.push_back(props);
+
+			std::cout << props->name << " " << props->mass << "\n";
 		}
 	}
 
-	Logger::info("Loaded configuration from directory: " + configPath.string());
+	tbl["system"].as_table()->erase("bodies");
+
+	Config config;
+	config.bodies = props_all;
+	config.settings = tbl;
 
 	return config;
-
-	// for (const auto& entry : std::filesystem::recursive_directory_iterator(configPath)) {
-	// 	if (entry.is_regular_file()) {
-	// 		// get entry path splitted
-	// 		auto relativePath = std::filesystem::relative(entry.path(), configPath);
-	// 		auto parts = relativePath.parent_path();
-	// 		// Example: parse each file and add to config
-	// 		// config.add(parseFile(entry.path()));
-	// 	}
-	// }
-	// return config;
 }

@@ -17,16 +17,23 @@ SolarSystem SolarSystem::loadFromConfig(const Config& config) {
 	// return solarSystem;
 }
 
-void SolarSystem::addBody(CelestialBody& body) {
-	if (_body_registry.find(body.name()) != _body_registry.end())
-		throw std::runtime_error("Body with name '" + body.name() + "' already exists in the system.");
+void SolarSystem::addBody(CelestialBody* body) {
+	if (_body_registry.find(body->name()) != _body_registry.end())
+		throw std::runtime_error("Body with name '" + body->name() + "' already exists in the system.");
 
-	_body_registry[body.name()] = &body;
-	_bodies.push_back(&body);
+	_body_registry[body->name()] = body;
+	_bodies.push_back(body);
 }
+
+#include <iostream>
 
 CelestialBody* SolarSystem::findBody(const std::string &name) {
 	auto it = _body_registry.find(name);
+
+	// std::cout << "Finding body: " << name << " - " << (it != _body_registry.end() ? "Found" : "Not Found") << std::endl;
+	// Print body details if found
+	// std::cout << it->second->mass() << std::endl;
+
 	return (it != _body_registry.end()) ? it->second : nullptr;
 }
 

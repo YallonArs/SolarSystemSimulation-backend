@@ -1,0 +1,22 @@
+[simulation]
+dt = 100
+
+[system]
+central_body = "Sun"
+
+[system.bodies.Sun]
+mass = 1.989e30
+
+[system.bodies.Venus]
+mass = 4.867e24
+a = 1.082e11
+e = 0.0067
+omega = 0
+phi = 0
+
+[system.bodies.Earth]
+mass = 5.972e24
+a = 1.496e11
+e = 0.8
+omega = 45
+phi = 0

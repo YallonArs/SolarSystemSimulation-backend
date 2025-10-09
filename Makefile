@@ -5,7 +5,7 @@ HDR = $(shell find src -name '*.h')
 OBJ = $(patsubst src/%,build/%,$(SRC:.cpp=.o))
 TARGET = main.exe
 # Recursively add all src/ subdirectories to the include path
-CXXFLAGS = -std=c++23 -Wall -Iinclude -Isrc -g
+CXXFLAGS = -std=c++23 -Wall -Iinclude -Isrc -Ilib -g -fno-rtti
 
 all: $(TARGET)
 
@@ -23,7 +23,7 @@ build:
 	mkdir -p build
 
 clean:
-	rm -rf build $(TARGET)
+	rm -rf build $(TARGET) .run
 
 re: clean all
 rer: clean all run

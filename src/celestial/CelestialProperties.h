@@ -21,6 +21,8 @@ struct CelestialProperties {
 	PhysicsBody::State state;
 	CelestialBody* parent = nullptr;
 
+	CelestialProperties() : name(""), mass(0), kepler(), state(), parent(nullptr) {};
+
 	CelestialProperties(const std::string &name, double mass, const KeplerCoords &kepler = KeplerCoords(), const PhysicsBody::State &state = PhysicsBody::State(), CelestialBody *parent = nullptr)
 		: name(name), mass(mass), kepler(kepler), state(state), parent(parent) {};
 };

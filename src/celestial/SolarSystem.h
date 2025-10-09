@@ -23,7 +23,7 @@ public:
 
 	static SolarSystem loadFromConfig(const Config& config);
 
-	void addBody(CelestialBody& body);
+	void addBody(CelestialBody* body);
 	CelestialBody* findBody(const std::string &name);
 
 	CelestialBody* getCentralBody() const { return _central_body; }
