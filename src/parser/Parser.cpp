@@ -25,8 +25,6 @@ Config Parser::load() {
 			props->state = PhysicsBody::State();
 
 			props_all.push_back(props);
-
-			std::cout << props->name << " " << props->mass << "\n";
 		}
 	}
 

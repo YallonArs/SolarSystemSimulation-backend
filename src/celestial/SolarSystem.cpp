@@ -1,12 +1,14 @@
 #include "SolarSystem.h"
 
 SolarSystem::~SolarSystem() {
-	for (auto body : _bodies) {
-		delete body;
-	}
+	// for (auto body : _bodies)
+	// 	delete body;
+	
 	_bodies.clear();
 	_body_registry.clear();
-	delete _central_body;
+	// delete _central_body;
+
+	// double free error was here~
 }
 
 void SolarSystem::addBody(CelestialBody* body) {
@@ -17,16 +19,25 @@ void SolarSystem::addBody(CelestialBody* body) {
 	_bodies.push_back(body);
 }
 
-#include <iostream>
-
-CelestialBody* SolarSystem::findBody(const std::string &name) {
+CelestialBody* SolarSystem::findBody(const std::string &name) const {
 	auto it = _body_registry.find(name);
 
-	// std::cout << "Finding body: " << name << " - " << (it != _body_registry.end() ? "Found" : "Not Found") << std::endl;
-	// Print body details if found
-	// std::cout << it->second->mass() << std::endl;
-
 	return (it != _body_registry.end()) ? it->second : nullptr;
+}
+
+CelestialBody* SolarSystem::getBodyByIndex(const uint16_t index) const {
+	if (index >= _bodies.size())
+		throw std::out_of_range("Index " + std::to_string(index) + " is out of range for bodies vector of size " + std::to_string(_bodies.size()) + ".");
+
+	return _bodies[index];
+}
+
+CelestialBody* SolarSystem::operator[](const std::string &name) const {
+	return findBody(name);
+}
+
+CelestialBody* SolarSystem::operator[](const uint16_t index) const {
+	return getBodyByIndex(index);
 }
 
 void SolarSystem::setCentralBody(const std::string &name) {

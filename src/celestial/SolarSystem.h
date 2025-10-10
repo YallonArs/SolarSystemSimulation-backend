@@ -24,7 +24,10 @@ public:
 	~SolarSystem();
 
 	void addBody(CelestialBody* body);
-	CelestialBody* findBody(const std::string &name);
+	CelestialBody* findBody(const std::string &name) const;
+	CelestialBody* getBodyByIndex(const uint16_t index) const;
+	CelestialBody* operator[](const std::string &name) const;
+	CelestialBody* operator[](const uint16_t index) const;
 
 	CelestialBody* getCentralBody() const { return _central_body; }
 	const std::vector<CelestialBody *> getBodies() const { return _bodies; }
