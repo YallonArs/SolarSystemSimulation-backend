@@ -1,20 +1,12 @@
 #include "SolarSystem.h"
 
-SolarSystem SolarSystem::loadFromConfig(const Config& config) {
-	// SolarSystem solarSystem;
-
-	// // Load bodies from config
-	// auto bodiesConfig = config.get("bodies");
-	// for (const auto& bodyConfig : bodiesConfig) {
-	// 	CelestialBody body = CelestialBody::fromConfig(bodyConfig);
-	// 	solarSystem.addBody(body);
-	// }
-
-	// // Set central body
-	// std::string centralBodyName = config.get("central_body");
-	// solarSystem.setCentralBody(centralBodyName);
-
-	// return solarSystem;
+SolarSystem::~SolarSystem() {
+	for (auto body : _bodies) {
+		delete body;
+	}
+	_bodies.clear();
+	_body_registry.clear();
+	delete _central_body;
 }
 
 void SolarSystem::addBody(CelestialBody* body) {
@@ -53,30 +45,4 @@ void SolarSystem::shiftToCentralBodyReference() {
 	for (auto body : _bodies) {
 		body->shiftToParentReference();
 	}
-}
-
-// Analysis methods
-double SolarSystem::getTotalSystemMass() const {
-	double total = 0;
-
-	for (auto body : _bodies)
-		total += body->mass();
-
-	return total;
-}
-
-// Simulation control
-// void SolarSystem::update(double deltaTime) {
-// 	auto all_bodies = getAllBodies();
-// 	_physics_engine.calculateForces(all_bodies);
-// }
-
-Point SolarSystem::getSystemBarycenter() const {
-	Point barycenter;
-	double total_mass = getTotalSystemMass();
-
-	for (auto body : _bodies)
-		barycenter += body->position() * body->mass();
-
-	return total_mass > Constants::EPSILON ? barycenter / total_mass : Point(0, 0);
 }

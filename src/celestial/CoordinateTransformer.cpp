@@ -25,7 +25,7 @@ PhysicsBody::State CoordinateTransformer::keplerToCartesian(const KeplerCoords &
 	std::cout << "Cartesian coords: x=" << state.position.x() << " y=" << state.position.y()
 			  << " vx=" << state.velocity.x() << " vy=" << state.velocity.y() << std::endl;
 	// cin
-	std::cin.get();
+	// std::cin.get();
 
 	return state;
 }

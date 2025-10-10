@@ -2,15 +2,14 @@
 
 #include "physics/PhysicsBody.h"
 
-// to avoid circular include
+// forward-declaration to avoid circular include
 class CelestialBody;
 
 struct KeplerCoords {
 	double a, e, omega, phi;
 
 	KeplerCoords() : a(0), e(0), omega(0), phi(0) {};
-	KeplerCoords(double a, double e, double omega, double phi)
-		: a(a), e(e), omega(omega), phi(phi) {};
+	KeplerCoords(double a, double e, double omega, double phi) : a(a), e(e), omega(omega), phi(phi) {};
 };
 
 // it fully describes a celestial body

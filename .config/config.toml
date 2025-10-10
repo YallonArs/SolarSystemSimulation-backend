@@ -7,16 +7,58 @@ central_body = "Sun"
 [system.bodies.Sun]
 mass = 1.989e30
 
+[system.bodies.Mercury]
+mass = 3.3011e23
+a = 0.38709927
+e = 0.20563593
+omega = 29.12703
+phi = 176.492864
+
 [system.bodies.Venus]
-mass = 4.867e24
-a = 1.082e11
-e = 0.0067
-omega = 0
-phi = 0
+mass = 4.8675e24
+a = 0.72333566
+e = 0.00677672
+omega = 54.92262
+phi = 50.978011
 
 [system.bodies.Earth]
-mass = 5.972e24
-a = 1.496e11
-e = 0.8
-omega = 45
-phi = 0
+mass = 5.97237e24
+a = 1.00000011
+e = 0.01671022
+omega = 102.93735
+phi = 357.444799
+
+[system.bodies.Mars]
+mass = 6.4171e23
+a = 1.52371034
+e = 0.09339410
+omega = -73.50317
+phi = 19.673736
+
+[system.bodies.Jupiter]
+mass = 1.89813e27
+a = 5.20288700
+e = 0.04838624
+omega = -85.74543
+phi = 20.223578
+
+[system.bodies.Saturn]
+mass = 5.68319e26
+a = 9.53667594
+e = 0.05386179
+omega = -21.06355
+phi = 318.937869
+
+[system.bodies.Uranus]
+mass = 8.6810e25
+a = 19.18916464
+e = 0.04725744
+omega = 96.93735
+phi = 145.446907
+
+[system.bodies.Neptune]
+mass = 1.02413e26
+a = 30.06992276
+e = 0.00859048
+omega = -86.81946
+phi = 258.947888

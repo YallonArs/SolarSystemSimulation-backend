@@ -97,10 +97,17 @@ int main() {
 
 	// while time < one month do steps and print moon position to file
 	simulator.start();
+
 	// open file
 	std::ofstream sun_file(".run/sun_position.txt");
-	std::ofstream earth_file(".run/earth_position.txt");
+	std::ofstream mercury_file(".run/mercury_position.txt");
 	std::ofstream venus_file(".run/venus_position.txt");
+	std::ofstream earth_file(".run/earth_position.txt");
+	std::ofstream mars_file(".run/mars_position.txt");
+	std::ofstream jupiter_file(".run/jupiter_position.txt");
+	std::ofstream saturn_file(".run/saturn_position.txt");
+	std::ofstream uranus_file(".run/uranus_position.txt");
+	std::ofstream neptune_file(".run/neptune_position.txt");
 
 	// // benchmark loop
 	// auto start = std::chrono::high_resolution_clock::now();
@@ -112,22 +119,27 @@ int main() {
 	// std::cout << "Steps per second: " << 1e7 / elapsed.count() << std::endl;
 	// std::cout << "Ms per tick: " << elapsed.count() / 1e7 * 1000 << std::endl;
 
-	// auto bodies = solarSystem.getBodies();
-	// for (const auto body : bodies) {
-	// 	std::cout << body->name() << " " << body->mass() << " " << body->position().x() << " " << body->position().y() << std::endl;
-	// }
 
-	for (int i = 0; i < 60 * 60 * 24 * 30. / 5; ++i) {
+	for (int i = 0; i < 60 * 60 * 24 * 30. / 10; ++i) {
 		simulator.step();
-		// auto sun = *solarSystem.findBody("Sun");
-		// std::cout << sun.mass();
-		// std::cin.get();
 
 		sun_file << (int64_t)solarSystem.findBody("Sun")->position().x() << " " << (int64_t)solarSystem.findBody("Sun")->position().y() << std::endl;
-		earth_file << (int64_t)solarSystem.findBody("Earth")->position().x() << " " << (int64_t)solarSystem.findBody("Earth")->position().y() << std::endl;
+		mercury_file << (int64_t)solarSystem.findBody("Mercury")->position().x() << " " << (int64_t)solarSystem.findBody("Mercury")->position().y() << std::endl;
 		venus_file << (int64_t)solarSystem.findBody("Venus")->position().x() << " " << (int64_t)solarSystem.findBody("Venus")->position().y() << std::endl;
+		earth_file << (int64_t)solarSystem.findBody("Earth")->position().x() << " " << (int64_t)solarSystem.findBody("Earth")->position().y() << std::endl;
+		mars_file << (int64_t)solarSystem.findBody("Mars")->position().x() << " " << (int64_t)solarSystem.findBody("Mars")->position().y() << std::endl;
+		jupiter_file << (int64_t)solarSystem.findBody("Jupiter")->position().x() << " " << (int64_t)solarSystem.findBody("Jupiter")->position().y() << std::endl;
+		saturn_file << (int64_t)solarSystem.findBody("Saturn")->position().x() << " " << (int64_t)solarSystem.findBody("Saturn")->position().y() << std::endl;
+		uranus_file << (int64_t)solarSystem.findBody("Uranus")->position().x() << " " << (int64_t)solarSystem.findBody("Uranus")->position().y() << std::endl;
+		neptune_file << (int64_t)solarSystem.findBody("Neptune")->position().x() << " " << (int64_t)solarSystem.findBody("Neptune")->position().y() << std::endl;
 	}
 	sun_file.close();
+	mercury_file.close();
 	venus_file.close();
 	earth_file.close();
+	mars_file.close();
+	jupiter_file.close();
+	saturn_file.close();
+	uranus_file.close();
+	neptune_file.close();
 }

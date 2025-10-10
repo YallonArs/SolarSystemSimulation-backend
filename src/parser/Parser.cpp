@@ -18,7 +18,7 @@ Config Parser::load() {
 
 			props->name = key.str();
 			props->mass = section["mass"].value_or(0.0);
-			props->kepler.a = section["a"].value_or(0.0);
+			props->kepler.a = section["a"].value_or(0.0) * Constants::ASTRONOMICAL_UNIT;
 			props->kepler.e = section["e"].value_or(0.0);
 			props->kepler.omega = section["omega"].value_or(0.0);
 			props->kepler.phi = section["phi"].value_or(0.0);

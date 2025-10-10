@@ -24,6 +24,7 @@ build:
 
 clean:
 	rm -rf build $(TARGET) .run
+	mkdir -p .run
 
 re: clean all
 rer: clean all run

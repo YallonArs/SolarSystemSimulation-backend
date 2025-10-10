@@ -21,15 +21,13 @@ public:
 		: _physics_engine(PhysicsEngine())
 		, _central_body(nullptr) {}
 
-	static SolarSystem loadFromConfig(const Config& config);
+	~SolarSystem();
 
 	void addBody(CelestialBody* body);
 	CelestialBody* findBody(const std::string &name);
 
 	CelestialBody* getCentralBody() const { return _central_body; }
 	const std::vector<CelestialBody *> getBodies() const { return _bodies; }
-	double getTotalSystemMass() const;
-	Point getSystemBarycenter() const;
 
 	void setCentralBody(const std::string &name);
 	void shiftToCentralBodyReference();

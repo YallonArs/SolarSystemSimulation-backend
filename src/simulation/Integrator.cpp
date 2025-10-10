@@ -23,6 +23,7 @@ void Integrator::integrate(std::vector<PhysicsBody *> &bodies, double deltaTime)
 	}
 }
 
+// TODO: rewrite
 Integrator::Derivative Integrator::evaluate(PhysicsBody &body, const PhysicsBody::State &initial_state, double dt, const Derivative &derivative) {
 	PhysicsBody::State state;
 	state.position = initial_state.position + derivative.dx * dt;
