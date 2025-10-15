@@ -18,10 +18,27 @@ struct CelestialProperties {
 	double mass;
 	KeplerCoords kepler;
 	PhysicsBody::State state;
-	CelestialBody* parent = nullptr;
+	std::string parentName = "";
+	std::vector<CelestialProperties*> satellites;
 
-	CelestialProperties() : name(""), mass(0), kepler(), state(), parent(nullptr) {};
+	CelestialProperties() : name(""), mass(0), kepler(), state(), parentName(""), satellites() {};
+	
+	// deep copy constructor
+	CelestialProperties(const CelestialProperties& other)
+		: name(other.name), mass(other.mass), kepler(other.kepler), state(other.state), parentName(other.parentName)
+	{
+		for (const auto* sat : other.satellites) {
+			if (sat)
+				satellites.push_back(new CelestialProperties(*sat));
+			else
+				satellites.push_back(nullptr);
+		}
+	}
 
-	CelestialProperties(const std::string &name, double mass, const KeplerCoords &kepler = KeplerCoords(), const PhysicsBody::State &state = PhysicsBody::State(), CelestialBody *parent = nullptr)
-		: name(name), mass(mass), kepler(kepler), state(state), parent(parent) {};
+	CelestialProperties(const std::string &name, double mass, const KeplerCoords &kepler = KeplerCoords(), const PhysicsBody::State &state = PhysicsBody::State(), const std::string &parentName = "", std::vector<CelestialProperties*> satellites = std::vector<CelestialProperties*>())
+		: name(name), mass(mass), kepler(kepler), state(state), parentName(parentName), satellites(satellites) {};
+
+	void convertAU() {
+		kepler.a *= Constants::ASTRONOMICAL_UNIT;
+	}
 };

@@ -1,12 +1,8 @@
 #include "SolarSystem.h"
 
 SolarSystem::~SolarSystem() {
-	// for (auto body : _bodies)
-	// 	delete body;
-	
 	_bodies.clear();
 	_body_registry.clear();
-	// delete _central_body;
 
 	// double free error was here~
 }
@@ -44,16 +40,35 @@ void SolarSystem::setCentralBody(const std::string &name) {
 	_central_body = findBody(name);
 	
 	for (auto body : _bodies){
-		if (body->getParent() != nullptr) continue;
-
-		body->setParent(_central_body);
+		// If the body has an explicit parent name, resolve it. Otherwise
+		// top-level bodies (no parentName) should be attached to central
+		// body except the central body itself.
+		if (body->getParentName() != "") {
+			CelestialBody *p = findBody(body->getParentName());
+			if (p) body->setParent(p);
+		} else if (body != _central_body) {
+			body->setParent(_central_body);
+		}
 	}
 }
 
 void SolarSystem::shiftToCentralBodyReference() {
 	if (!_central_body) return;
 
+	// Convert all bodies' states from parent-relative to global coordinates.
+	// Start at central body (its position remains as-is) and recurse into
+	// its satellites to set global positions/velocities.
+	// The helper in CelestialBody will recurse children.
 	for (auto body : _bodies) {
-		body->shiftToParentReference();
+		if (body == _central_body) {
+			// central body: if it was stored with parent == itself, zero it
+			// if (body->getParent() && body->getParent()->name() == body->name()) {
+			// }
+			body->setPosition(Point(0,0));
+			body->setVelocity(Vector(0,0));
+			// shift children of central body to global coordinates
+			body->shiftChildrenToGlobal();
+			break; // only need to start recursion once from central body
+		}
 	}
 }
