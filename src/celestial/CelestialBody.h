@@ -6,7 +6,6 @@
 #include "CelestialProperties.h"
 #include "physics/PhysicsBody.h"
 
-// TODO: implements satellite and parent body relationships
 class CelestialBody : public PhysicsBody {
 protected:
 	std::vector<CelestialBody*> _satellites;

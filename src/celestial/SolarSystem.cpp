@@ -61,9 +61,6 @@ void SolarSystem::shiftToCentralBodyReference() {
 	// The helper in CelestialBody will recurse children.
 	for (auto body : _bodies) {
 		if (body == _central_body) {
-			// central body: if it was stored with parent == itself, zero it
-			// if (body->getParent() && body->getParent()->name() == body->name()) {
-			// }
 			body->setPosition(Point(0,0));
 			body->setVelocity(Vector(0,0));
 			// shift children of central body to global coordinates
