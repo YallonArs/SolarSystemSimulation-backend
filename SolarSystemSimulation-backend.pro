@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += staticlib c++23
-TARGET = backend
+TARGET = SolarSystemSimulation-backend
 
 INCLUDEPATH += $$PWD/src
 DEPENDPATH += $$PWD/src
