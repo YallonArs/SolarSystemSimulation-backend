@@ -18,6 +18,7 @@ private:
 
 public:
 	Simulator(SolarSystem& system, Integrator& integrator);
+	Simulator();
 
 	void step();
 	void run(uint32_t steps);

@@ -1,5 +1,5 @@
 [simulation]
-dt = 100
+time_step = 100
 
 [system]
 central_body = "Sun"
