@@ -17,7 +17,7 @@ private:
 	Config loadFromTable(const toml::table& table);
 
 public:
-	Parser(std::string config_path = ".config/config.toml") : configPath(config_path) {};
+	Parser(const std::string config_path = ".config/config.toml");
 
 	Config load();
 };

@@ -6,6 +6,10 @@
 #include "celestial/CelestialProperties.h"
 #include "utils/Config.h"
 
+Parser::Parser(const std::string config_path) {
+	this->configPath = (std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() / config_path).string();
+}
+
 Config Parser::loadFromTable(const toml::table &table) {
 	const auto *system_table_ptr = table["system"].as_table();
 	if (!system_table_ptr) {

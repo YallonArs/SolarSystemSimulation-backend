@@ -4,8 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/src",
-                "${workspaceFolder}/lib"
+                "${workspaceFolder}/src"
             ],
             "defines": [
                 "_DEBUG",
@@ -20,8 +19,7 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/src",
-                "${workspaceFolder}/lib"
+                "${workspaceFolder}/src"
             ],
             "defines": [
                 "_DEBUG",
