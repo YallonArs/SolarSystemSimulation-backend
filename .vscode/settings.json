@@ -68,7 +68,8 @@
 		"set": "cpp",
 		"regex": "cpp",
 		"future": "cpp",
-		"valarray": "cpp"
+		"valarray": "cpp",
+		"text_encoding": "cpp"
 	},
 	"cSpell.words": [
 		"Iinclude",

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <map>
+#include <string>
+#include <vector>
+
 #include "physics/PhysicsBody.h"
 
 // forward-declaration to avoid circular include
@@ -20,6 +24,7 @@ struct CelestialProperties {
 	PhysicsBody::State state;
 	std::string parentName = "";
 	std::vector<CelestialProperties*> satellites;
+	std::map<std::string, double> custom_params;
 
 	CelestialProperties() : name(""), mass(0), kepler(), state(), parentName(""), satellites() {};
 	

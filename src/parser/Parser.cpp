@@ -1,10 +1,11 @@
-#include "toml.hpp"
 #include <filesystem>
 #include <iostream>
+#include "toml.hpp"
 
 #include "Parser.h"
 #include "celestial/CelestialProperties.h"
 #include "utils/Config.h"
+#include "utils/other.h"
 
 Parser::Parser(const std::string config_path) {
 	this->configPath = (std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() / config_path).string();
@@ -55,7 +56,22 @@ CelestialProperties *Parser::loadBody(const toml::table &table) {
 	props->kepler.omega = table["omega"].value_or(0.0);
 	props->kepler.phi = table["phi"].value_or(0.0);
 	props->state = PhysicsBody::State();
+	
+	std::map<std::string, double> custom_params;
 
+	for (const auto &[key, value] : table) {
+		std::string key_str(key.str());
+		// TODO: is this correct???
+		if (!in({"mass", "a", "e", "omega", "phi"}, key_str)) {
+			std::cout << "Key: " << key_str << " NOT IN main params, loading to custom_params" << std::endl;
+			custom_params[key_str] = value.value_or<double>(0.0);
+		}
+		
+		std::cout << "Key: " << key_str << ", Value: " << custom_params[key_str] << std::endl;
+	}
+
+	props->custom_params = custom_params;
+	
 	// set externally:
 	// props->name
 	// props->parentName
@@ -70,8 +86,8 @@ std::vector<CelestialProperties *> &Parser::loadPlanets(const toml::table &bodie
 	std::vector<CelestialProperties *> *props_all = new std::vector<CelestialProperties *>();
 
 	// always load the central body first
-	const auto* central_body_table = bodies_table[central_body_name].as_table();
-	
+	const auto *central_body_table = bodies_table[central_body_name].as_table();
+
 	if (!central_body_table) {
 		// table with central body name does not exist
 		Logger::error("Central body '" + central_body_name + "' not found in bodies.");
@@ -94,12 +110,12 @@ std::vector<CelestialProperties *> &Parser::loadPlanets(const toml::table &bodie
 			props->name = body_name;
 			props->convertAU();
 			props->parentName = central_body_name;
-			
+
 			std::cout << "Loaded planet: " << props->name << std::endl;
 
 			std::vector<CelestialProperties *> satellites = loadSatellites(*value.as_table(), body_name);
 			props->satellites = std::move(satellites);
-			
+
 			props_all->push_back(props);
 			// for (auto *satellite : props->satellites)
 			// 	props_all->push_back(satellite);

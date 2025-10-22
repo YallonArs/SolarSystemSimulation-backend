@@ -39,6 +39,7 @@ public:
 	void setMass(double mass) { _mass = mass; }
 	void setPosition(const Point &pos) { _state.position = pos; }
 	void setVelocity(const Vector &vel) { _state.velocity = vel; }
+	void setState(const State &state) { _state = state; }
 	void setAcceleration(const Vector &acc) { _acceleration = acc; }
 
 	// interaction

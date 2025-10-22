@@ -1,5 +1,5 @@
 [simulation]
-time_step = 100
+time_step = 10
 
 [system]
 central_body = "Sun"
@@ -69,3 +69,18 @@ phi = 0
 # e = 0.00859048
 # omega = -86.81946
 # phi = 258.947888
+
+# TODO: add comet
+[system.bodies.Comet1]
+mass = 1e14
+q = 1.5
+v = 40
+r_start = 5
+rv_calculation = 1
+
+[system.bodies.Comet2]
+mass = 1e14
+q = 0.586
+v = 70.56
+r_start = 10
+rv_calculation = 1

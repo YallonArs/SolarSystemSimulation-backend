@@ -1,8 +1,11 @@
 #include <string>
+#include <iostream>
 
 #include "simulation/Simulation.h"
 #include "physics/PhysicsBody.h"
 #include "parser/Parser.h"
+#include "utils/other.h"
+#include "celestial/CoordinateTransformer.h"
 
 Simulator::Simulator(SolarSystem& system, Integrator& integrator)
 	: _solar_system(system)
@@ -44,6 +47,30 @@ Simulator::Simulator() {
 			if (parent_props)
 				parent_mass = parent_props->mass;
 		}
+
+		auto custom_params = body->getCustomParams();
+
+		if (custom_params.find("rv_calculation") != custom_params.end()){
+			double rv_calculation = custom_params["rv_calculation"];
+			if (rv_calculation != 0) {
+				// check for "v" and "q" params
+				if (allin(custom_params, {"v", "q", "r_start"})) {
+					double v = custom_params["v"] * 1000; // km/s to m/s
+					double q = custom_params["q"] * Constants::ASTRONOMICAL_UNIT; // AU to m
+					double r_start = custom_params["r_start"] * Constants::ASTRONOMICAL_UNIT; // AU to m
+
+					PhysicsBody::State state = CoordinateTransformer::vqToCartesian(v, q, r_start, parent_mass);
+					body->setState(state);
+					// print state
+					std::cout << "Setting state for body " << body->name() << " from vqToCartesian: "
+							  << "position(" << state.position.x() << ", " << state.position.y() << ", " << "), "
+							  << "velocity(" << state.velocity.x() << ", " << state.velocity.y() << ", " << ")"
+							  << std::endl;
+					continue;
+				}
+			}
+		}
+		
 		body->setStateFromKepler(body->getKepler(), parent_mass);
 	}
 

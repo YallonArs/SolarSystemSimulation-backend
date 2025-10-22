@@ -3,9 +3,9 @@
 
 CelestialBody::CelestialBody(const CelestialProperties &props)
 	: PhysicsBody(props.name, props.mass, props.state),
-	  _parent_body_name(props.parentName), _parent_body(nullptr), kepler(props.kepler) {}
+	  _parent_body_name(props.parentName), _parent_body(nullptr), _kepler(props.kepler), _custom_params(props.custom_params) {}
 
-void CelestialBody::addSatellite(CelestialBody* satellite) {
+void CelestialBody::addSatellite(CelestialBody *satellite) {
 	satellite->setParent(this);
 	satellite->shiftToParentReference();
 	_satellites.push_back(satellite);
@@ -19,16 +19,15 @@ void CelestialBody::shiftToParentReference() {
 }
 
 // sets this body's state from Keplerian elements, then shifts to global coordinates if parent is set
-void CelestialBody::setStateFromKepler(const KeplerCoords& kepler, double parent_mass) {
+void CelestialBody::setStateFromKepler(const KeplerCoords &kepler, double parent_mass) {
 	PhysicsBody::State state = CoordinateTransformer::keplerToCartesian(kepler, parent_mass);
-	setPosition(state.position);
-	setVelocity(state.velocity);
+
+	setState(state);
 }
 
 // recursively shift children to global coordinates (helper - not exposed)
 void CelestialBody::shiftChildrenToGlobal() {
-	for (auto child : _satellites) {
+	for (auto child : _satellites)
 		// convert this child's stored parent-relative state into global
 		child->shiftToParentReference();
-	}
 }

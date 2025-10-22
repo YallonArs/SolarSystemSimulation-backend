@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "CelestialProperties.h"
 #include "physics/PhysicsBody.h"
@@ -11,7 +12,8 @@ protected:
 	std::vector<CelestialBody*> _satellites;
 	CelestialBody *_parent_body;
 	std::string _parent_body_name;
-	KeplerCoords kepler;
+	KeplerCoords _kepler;
+	std::map<std::string, double> _custom_params;
 
 public:
 	CelestialBody(const CelestialProperties &other);
@@ -19,8 +21,9 @@ public:
 	// getters
 	CelestialBody *getParent() const { return _parent_body; }
 	std::string getParentName() const { return _parent_body_name; }
-	KeplerCoords getKepler() const { return kepler; }
+	KeplerCoords getKepler() const { return _kepler; }
 	const std::vector<CelestialBody*> &getSatellites() const { return _satellites; }
+	const std::map<std::string, double> &getCustomParams() const { return _custom_params; }
 
 	// setters
 	void setParent(CelestialBody *parent) { _parent_body = parent; }
