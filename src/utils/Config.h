@@ -1,11 +1,14 @@
 #pragma once
 
 #include <vector>
-#include "celestial/CelestialProperties.h"
 #include "toml.hpp"
+
+#include "celestial/Comet.h"
+#include "celestial/CelestialProperties.h"
 
 struct Config {
 	std::vector<CelestialProperties*> bodies;
+	std::vector<CometProperties*> comets;
 	toml::table settings;
 
 	CelestialProperties* getBodyByName(const std::string& name) {

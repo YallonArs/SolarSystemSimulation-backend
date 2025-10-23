@@ -3,6 +3,8 @@
 #include <string>
 #include <filesystem>
 
+#include "celestial/Comet.h"
+#include "celestial/CelestialProperties.h"
 #include "utils/Config.h"
 #include "utils/Logger.h"
 
@@ -13,6 +15,7 @@ private:
 	CelestialProperties* loadBody(const toml::table& table);
 	std::vector<CelestialProperties *> &loadPlanets(const toml::table &table, const std::string &central_body_name);
 	std::vector<CelestialProperties *> &loadSatellites(const toml::table &table, const std::string &central_body_name);
+	std::vector<CometProperties *> &loadComets(const toml::table &table, const std::string &central_body_name);
 
 	Config loadFromTable(const toml::table& table);
 

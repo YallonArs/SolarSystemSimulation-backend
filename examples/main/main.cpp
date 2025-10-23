@@ -10,6 +10,15 @@
 
 int main() {
 	Simulator simulator;
+	simulator.getSolarSystem().startComet("1");
+	// cout all body names in the solar system
+	for (const auto &body : simulator.getSolarSystem().getBodies()) {
+		std::cout << "Body: " << body->name() << std::endl;
+	}
+	// cout all comet
+	for (const auto &comet : simulator.getSolarSystem().getComets()) {
+		std::cout << "Comet: " << comet->name() << std::endl;
+	}
 	// simulator.getTimeStep();
 
 	// // benchmark loop

@@ -8,8 +8,6 @@
 #include "utils/Logger.h"
 
 class Simulator {
-public:
-
 private:
 	SolarSystem _solar_system;
 	Integrator _integrator;

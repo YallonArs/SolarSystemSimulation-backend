@@ -13,7 +13,6 @@ protected:
 	CelestialBody *_parent_body;
 	std::string _parent_body_name;
 	KeplerCoords _kepler;
-	std::map<std::string, double> _custom_params;
 
 public:
 	CelestialBody(const CelestialProperties &other);
@@ -23,7 +22,6 @@ public:
 	std::string getParentName() const { return _parent_body_name; }
 	KeplerCoords getKepler() const { return _kepler; }
 	const std::vector<CelestialBody*> &getSatellites() const { return _satellites; }
-	const std::map<std::string, double> &getCustomParams() const { return _custom_params; }
 
 	// setters
 	void setParent(CelestialBody *parent) { _parent_body = parent; }

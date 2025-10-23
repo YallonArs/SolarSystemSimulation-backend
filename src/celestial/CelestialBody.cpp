@@ -3,7 +3,7 @@
 
 CelestialBody::CelestialBody(const CelestialProperties &props)
 	: PhysicsBody(props.name, props.mass, props.state),
-	  _parent_body_name(props.parentName), _parent_body(nullptr), _kepler(props.kepler), _custom_params(props.custom_params) {}
+	  _parent_body_name(props.parentName), _parent_body(nullptr), _kepler(props.kepler) {}
 
 void CelestialBody::addSatellite(CelestialBody *satellite) {
 	satellite->setParent(this);

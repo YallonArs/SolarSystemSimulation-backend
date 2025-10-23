@@ -36,6 +36,7 @@ public:
 	const Vector &acceleration() const { return _acceleration; }
 
 	// setters
+	void setName(const std::string &name) { _name = name; }
 	void setMass(double mass) { _mass = mass; }
 	void setPosition(const Point &pos) { _state.position = pos; }
 	void setVelocity(const Vector &vel) { _state.velocity = vel; }

@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <iostream>
+#include <array>
 #include "toml.hpp"
 
 #include "Parser.h"
@@ -24,6 +25,12 @@ Config Parser::loadFromTable(const toml::table &table) {
 		return Config();
 	}
 
+	const auto *comets_table_ptr = (*system_table_ptr)["comets"].as_table();
+	if (!comets_table_ptr) {
+		Logger::error("No 'comets' table found in config.");
+		return Config();
+	}
+
 	std::string central_body_name = (*system_table_ptr)["central_body"].value_or<std::string>("");
 	std::cout << "FOUND CENTRAL BODY ENTRY: " << central_body_name << std::endl;
 	if (central_body_name == "") {
@@ -31,17 +38,20 @@ Config Parser::loadFromTable(const toml::table &table) {
 		return Config();
 	}
 
-	// std::vector<CelestialProperties *> props_all = loadBodies(*bodies_table_ptr, central_body_name, central_body_name);
 	std::vector<CelestialProperties *> props_all = loadPlanets(*bodies_table_ptr, central_body_name);
-
+	std::vector<CometProperties *> comet_props = loadComets(*comets_table_ptr, central_body_name);
+	
 	toml::table table_copy = table;
 	auto *system_table = table_copy["system"].as_table();
 
-	if (system_table)
+	if (system_table) {
 		system_table->erase("bodies");
+		system_table->erase("comets");
+	}
 
 	Config config;
 	config.bodies = props_all;
+	config.comets = comet_props;
 	config.settings = table_copy;
 
 	return config;
@@ -56,21 +66,6 @@ CelestialProperties *Parser::loadBody(const toml::table &table) {
 	props->kepler.omega = table["omega"].value_or(0.0);
 	props->kepler.phi = table["phi"].value_or(0.0);
 	props->state = PhysicsBody::State();
-	
-	std::map<std::string, double> custom_params;
-
-	for (const auto &[key, value] : table) {
-		std::string key_str(key.str());
-		// TODO: is this correct???
-		if (!in({"mass", "a", "e", "omega", "phi"}, key_str)) {
-			std::cout << "Key: " << key_str << " NOT IN main params, loading to custom_params" << std::endl;
-			custom_params[key_str] = value.value_or<double>(0.0);
-		}
-		
-		std::cout << "Key: " << key_str << ", Value: " << custom_params[key_str] << std::endl;
-	}
-
-	props->custom_params = custom_params;
 	
 	// set externally:
 	// props->name
@@ -97,7 +92,7 @@ std::vector<CelestialProperties *> &Parser::loadPlanets(const toml::table &bodie
 	// try to load central body
 	CelestialProperties *central_body_props = loadBody(*central_body_table);
 	central_body_props->name = central_body_name;
-	std::cout << "Loaded central body: " << central_body_props->name << std::endl;
+	Logger::debug("Loaded central body: " + central_body_props->name);
 	props_all->push_back(central_body_props);
 
 	// load other bodies except the central body
@@ -144,6 +139,28 @@ std::vector<CelestialProperties *> &Parser::loadSatellites(const toml::table &ta
 	}
 
 	return *props_satellites;
+}
+
+std::vector<CometProperties *> &Parser::loadComets(const toml::table &table, const std::string &central_body_name) {
+	std::vector<CometProperties *> *comet_props = new std::vector<CometProperties *>();
+
+	for (const auto &[key, value] : table) {
+		if (value.is_table()) {
+			std::string comet_name(key.str());
+
+			auto comet_table = *value.as_table();
+			double mass = comet_table["mass"].value_or(0.0);
+			double q = comet_table["q"].value_or(0.0);
+			double v = comet_table["v"].value_or(0.0);
+			double r_start = comet_table["r_start"].value_or(10.0);
+
+			CometProperties *props = new CometProperties(comet_name, mass, q, v, r_start);
+
+			comet_props->push_back(props);
+		}
+	}
+
+	return *comet_props;
 }
 
 Config Parser::load() {

@@ -24,6 +24,7 @@ Simulator::Simulator() {
 	CelestialProperties central_body_props = *config.getBodyByName(central_body_name);
 	CelestialBody central_body(central_body_props);
 
+	// load planets and moons into flattened list
 	std::vector<CelestialBody*> bodies_all;
 	for (auto *body_props : config.bodies) {
 		CelestialBody* body = new CelestialBody(*body_props);
@@ -37,38 +38,38 @@ Simulator::Simulator() {
 		bodies_all.emplace_back(body);
 	}
 
-	// Set states for all bodies except central body (Sun)
+	// load comets
+	for (auto *comet_props : config.comets) {
+		std::cout << "Comet: " << comet_props->name << std::endl;
+		comet_props->v *= 1000; // km/s to m/s
+		comet_props->q *= Constants::ASTRONOMICAL_UNIT; // AU to m
+		comet_props->r_start *= Constants::ASTRONOMICAL_UNIT; // AU to m
+
+		Comet* comet = new Comet(*comet_props, &central_body);
+
+		PhysicsBody::State state = CoordinateTransformer::vqToCartesian(
+			comet_props->v,
+			comet_props->q,
+			comet_props->r_start,
+			central_body.mass()
+		);
+
+		comet->setState(state);
+		comet->shiftToParentReference();
+		solarSystem.addComet(comet);
+	}
+
+	// set initial states for planets and moons
 	for (auto *body : bodies_all) {
+		// skip Sun
 		if (body->name() == central_body_name) continue;
 		
+		// set parent mass
 		double parent_mass = central_body_props.mass;
 		if (!body->getParentName().empty()) {
 			CelestialProperties *parent_props = config.getBodyByName(body->getParentName());
 			if (parent_props)
 				parent_mass = parent_props->mass;
-		}
-
-		auto custom_params = body->getCustomParams();
-
-		if (custom_params.find("rv_calculation") != custom_params.end()){
-			double rv_calculation = custom_params["rv_calculation"];
-			if (rv_calculation != 0) {
-				// check for "v" and "q" params
-				if (allin(custom_params, {"v", "q", "r_start"})) {
-					double v = custom_params["v"] * 1000; // km/s to m/s
-					double q = custom_params["q"] * Constants::ASTRONOMICAL_UNIT; // AU to m
-					double r_start = custom_params["r_start"] * Constants::ASTRONOMICAL_UNIT; // AU to m
-
-					PhysicsBody::State state = CoordinateTransformer::vqToCartesian(v, q, r_start, parent_mass);
-					body->setState(state);
-					// print state
-					std::cout << "Setting state for body " << body->name() << " from vqToCartesian: "
-							  << "position(" << state.position.x() << ", " << state.position.y() << ", " << "), "
-							  << "velocity(" << state.velocity.x() << ", " << state.velocity.y() << ", " << ")"
-							  << std::endl;
-					continue;
-				}
-			}
 		}
 		
 		body->setStateFromKepler(body->getKepler(), parent_mass);
@@ -84,20 +85,21 @@ Simulator::Simulator() {
 
 	_solar_system = solarSystem;
 	_integrator = integrator;
+
 	setTimeStep(config.settings["simulation"]["time_step"].value_or(100.0));
 }
 
 void Simulator::step() {
-	std::vector<PhysicsBody*> all_bodies;
+	std::vector<PhysicsBody*> bodies;
 	for (const auto& body : _solar_system.getBodies())
-		all_bodies.push_back(static_cast<PhysicsBody*>(body));
+		bodies.push_back(static_cast<PhysicsBody*>(body));
 
-	PhysicsEngine().calculateForces(all_bodies);
+	PhysicsEngine().calculateForces(bodies);
 
-	for (auto body : all_bodies)
+	for (auto body : bodies)
 		body->updateAcceleration();
 
-	_integrator.integrate(all_bodies, _time_step);
+	_integrator.integrate(bodies, _time_step);
 
 	_solar_system.shiftToCentralBodyReference();
 

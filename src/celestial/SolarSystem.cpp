@@ -3,8 +3,6 @@
 SolarSystem::~SolarSystem() {
 	_bodies.clear();
 	_body_registry.clear();
-
-	// double free error was here~
 }
 
 void SolarSystem::addBody(CelestialBody* body) {
@@ -13,6 +11,19 @@ void SolarSystem::addBody(CelestialBody* body) {
 
 	_body_registry[body->name()] = body;
 	_bodies.push_back(body);
+}
+
+void SolarSystem::addComet(Comet* body) {
+	_comets.push_back(body);
+}
+
+void SolarSystem::startComet(std::string name) {
+	for (auto comet : _comets) {
+		if (comet->name() == name) {
+			addBody(static_cast<CelestialBody*>(comet));
+			return;
+		}
+	}
 }
 
 CelestialBody* SolarSystem::findBody(const std::string &name) const {
